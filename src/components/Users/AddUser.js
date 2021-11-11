@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
-import Card from '../UI/Card'
-import Button from '../UI/Button'
+import Card    from '../UI/Card'
+import Button  from '../UI/Button'
 import classes from './AddUser.module.css'
 
 export default function AddUser(props) {
@@ -15,7 +15,7 @@ export default function AddUser(props) {
   if (+enteredUserAge < 1) {
    return
   }
-  console.log(enteredUserName, enteredUserAge)
+  props.onAddUser(enteredUserName, enteredUserAge)
   setEnteredUserName('')
   setEnteredUserAge('')
  }
