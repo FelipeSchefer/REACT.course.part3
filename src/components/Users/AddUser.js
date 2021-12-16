@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useRef} from 'react'
 import Card    from '../UI/Card'
 import Button  from '../UI/Button'
 import classes from './AddUser.module.css'
@@ -6,37 +6,29 @@ import ErrorModal from '../UI/ErrorModal'
 import Wrapper from '../Helpers/Wrapper'
 
 export default function AddUser(props) {
- const[enteredUserName, setEnteredUserName] = useState('')
- const[enteredUserAge , setEnteredUserAge ] = useState('')
+ const nameInputRef = useRef()
+ const ageInputRef = useRef()
  const[error, setError] = useState('')
 
  const addUserHandler = event =>{
+  const enteredName = nameInputRef.current.value
+  const enteredAge  = ageInputRef.current.value
   event.preventDefault()
-  if (enteredUserName.trim().length === 0 || enteredUserAge.trim().length === 0) {
+  if (enteredName.trim().length === 0 || enteredAge.trim().length === 0) {
    setError({
     title: 'Invalid input',
     message: 'Please enter a valid name and age (non-empty values)'
    })
    return
   }
-  if (+enteredUserAge < 1) {
+  if (+enteredAge < 1) {
    setError({
     title: 'Invalid age',
     message: 'Please enter a valid age (> 0)'
    })
    return
   }
-  props.onAddUser(enteredUserName, enteredUserAge)
-  setEnteredUserName('')
-  setEnteredUserAge('')
- }
-
- const usernameChangeHandler = event =>{
-  setEnteredUserName(event.target.value)
- }
-
- const userageChangeHandler = event =>{
-  setEnteredUserAge(event.target.value)
+  props.onAddUser(enteredName, enteredAge)
  }
 
  const errorHandler = () => {
@@ -52,16 +44,14 @@ export default function AddUser(props) {
      <input 
       id="user-name" 
       type="text"
-      value={enteredUserName}
-      onChange={usernameChangeHandler}
+      ref={nameInputRef}
       />
 
      <label htmlFor="user-age">Age (years)</label>
      <input 
       id="user-age"
       type="number"
-      value={enteredUserAge}
-      onChange={userageChangeHandler}
+      ref={ageInputRef}
       />
 
      <Button type="submit"> Add User</Button>
